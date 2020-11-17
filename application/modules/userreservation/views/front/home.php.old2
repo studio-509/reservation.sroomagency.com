@@ -1,0 +1,10 @@
+<?php
+$this->load->view('/front/head');
+$this->load->view('/front/header');
+
+echo '<div id="_calendrier">'.$vue.'</div>';
+echo '<div id="_resa_form" class="hidden">'.$vue2.'</div>';
+echo '<div id="_resa_recap_flo" class="hidden">'.$vue3.'</div>';
+
+$this->load->view('/front/footer');
+?>

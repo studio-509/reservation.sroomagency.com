@@ -1,0 +1,66 @@
+
+<div>
+	<ul class="listOnglets">
+		<li><a id="settings_list" class="button btnONG _tab_drop button_active">Type de tarifs</a></li>
+		<li><a id="tarif_list" class="button btnONG _tab_drop">Tarifs</a></li>
+		<li><a id="promo_list" class="button btnONG _tab_drop">Promotions</a></li>
+	</ul>
+</div>
+<div id='bloc_tarif_list' class="_tab_bloc block_admin block_admin_ong masque2 clear">
+<!--	<div class="row"> -->
+<!--		<div class="col-xs-6 col-sm-4 col-md-3"/> -->
+		<label>Nom de la salle :</label>
+		<select name="salle" id="salle-admin">
+			<?php foreach($salles as $salle): ?>
+				<option value="<?=$salle->id?>"><?=$salle->nom?></option>
+			<?php endforeach; ?>
+		</select>
+<!--	</div> -->
+	<a class="btn_actions button pull-right _tarif_add">Créer un nouveau tarif</a>
+	<div id="bloc_tarif" class="block_admin clear">
+		<?=$liste?>
+	</div>
+</div>
+</div>
+<div id='bloc_promo_list' class="_tab_bloc block_admin block_admin_ong masque2 clear">
+	<a class="btn_actions button pull-right _promo_add">Créer promotion</a>
+	<div id="bloc_promo" class="block_admin clear">
+		<?=$liste_promo?>
+	</div>
+</div>
+<div id='bloc_settings_list' class="_tab_bloc block_admin block_admin_ong clear">
+	<div id="bloc_promo" class="block_admin clear">
+		<div class="settings">
+			Tarifs week-end du  <?=$settings?>
+		</div>
+		<form class="hidden settings_form" id="tarifs_settings">
+			Du
+			<select class="" name="start-day">
+				<?php foreach ($days as $key => $value): ?>
+					<option value="<?=$key?>" <?=( $key == 5 ? 'selected':'' )?>><?=$value?></option>
+				<?php endforeach; ?>
+			</select>
+			<select class="" name="start-hour">
+				<?php for ($i = 0; $i < 24 ; $i++) {
+					echo '<option value="'.$i.'h00"'.( $i == 18 ? 'selected':'' ).'>'.$i.'h00</option>';
+				} ?>
+			</select>
+			Au
+			<select class="" name="end-day">
+				<?php foreach ($days as $key => $value): ?>
+					<option value="<?=$key?>" <?=( $key == 7 ? 'selected':'' )?>><?=$value?></option>
+				<?php endforeach; ?>
+			</select>
+			<select class="" name="end-hour">
+				<?php for ($i = 0; $i < 24 ; $i++) {
+					echo '<option value="'.$i.'h00" '.( $i == 22 ? 'selected':'' ).'>'.$i.'h00</option>';
+				} ?>
+			</select>
+		</form>
+		<ul class="list-action">
+			<li><a class="btn_actions btn_details _settings_update"><img src="<?php echo APP_URL; ?>/assets/img/picto-action-modifier.png" /></a></li>
+			<li><a class="btn_actions btn_details _settings_validate hidden">Valider</a></li>
+			<li><a class="btn_actions btn_details _settings_cancel hidden">Annuler</a></li>
+		</ul>
+	</div>
+</div>

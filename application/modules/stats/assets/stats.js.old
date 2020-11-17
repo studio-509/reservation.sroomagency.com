@@ -1,0 +1,262 @@
+
+
+
+
+
+
+$(document).on('ready',function() {
+	/**
+	* Chargement des graphiques par défaut
+	*/
+	frequentation('m','0','0','1|2|3|tot');
+	nbjoueurs_resa_bar_chart();
+	
+	/**
+	* Gestion onglets
+	*/
+	$(document).on('click','._tab_drop',function(){
+		var tab = '#bloc_' + $(this).attr('id');
+		$('._tab_bloc').addClass('hidden');
+		$('._tab_drop').removeClass('button_active');
+		$(this).addClass('button_active');
+		$(tab).removeClass('hidden');
+	});
+	/**
+	* Gestion d'un changement sur le formulaire de fréquentation
+	*/
+	$('#freqchange').on('a_change_came',function() {
+		var type = $('input[name=type_frequentation]:checked').val();		
+		var compare = $('input[name=compare_frequentation]:checked').val();
+		var annee = "0";
+		
+		if (compare == 1) {
+			var salles = $('input[name=salle_compare_frequentation]:checked').val();
+		}
+		else {
+			var annee = $('#select_annee option:selected').val();
+			var salles = "";
+			$('input[name=salle_frequentation]:checked').each(function() {
+				salles += $(this).val()+'|';
+			});
+			salles = salles.substr(0,salles.length-1);
+		}
+		
+				
+		
+		frequentation(type,compare,annee,salles);
+	});
+	/**
+	* Changement type graphique fréquentation
+	*/
+	$(document).on('change','input[name=type_frequentation]',function(){
+		$('#freqchange').trigger('a_change_came');		
+	});
+	
+	/**
+	* Changement annee.
+	*/
+	$(document).on('change','#select_annee',function(){
+		$('#freqchange').trigger('a_change_came');		
+	});
+
+	/**
+	* Changement salles sans comparaison.
+	*/
+	$(document).on('change','input[name=salle_frequentation]',function(){
+		$('#freqchange').trigger('a_change_came');		
+	});	
+	
+	/**
+	* Changement salles avec comparaison.
+	*/
+	$(document).on('change','input[name=salle_compare_frequentation]',function(){
+		$('#freqchange').trigger('a_change_came');		
+	});	
+	
+	/**
+	* Changement comparaison ou non
+	*/
+	$(document).on('change','input[name=compare_frequentation]',function(){
+		var compare = $('input[name=compare_frequentation]:checked').val();
+		if (compare == 1) {
+			$('.compare_tab').removeClass('hidden');
+			$('.no_compare_tab').addClass('hidden');
+		}
+		else {
+			$('.no_compare_tab').removeClass('hidden');
+			$('.compare_tab').addClass('hidden');
+		}
+		$('#freqchange').trigger('a_change_came');	
+	});	
+	
+	
+});
+
+function frequentation(type,compare,annee,salles) {
+	var datatemp = [];
+	var dataset = {};
+	var dataok = [];
+	var datas = {"intervale":type,"compare":compare,"annee":annee,"salles":salles};
+	var message = JSON.stringify(datas);
+
+	jQuery.ajax({
+		type: 'POST',
+		url: '/stats/admin/Statsadmin/getStatsFreq',
+		data: {
+	  			'message':message
+  		},
+		success: function(data, textStatus, jqXHR) {
+			console.log(data);
+			var json = data;
+			var nbchart = 0;
+			JSON.parse(json,(key,value) => {
+				if (key != "") {
+					if (key == "chart"+nbchart) {						
+						dataset[key] = {};
+						dataset[key].data = datatemp;
+						datatemp = [];
+						dataset[key].label = value;
+						dataset[key].lines = {show:true};
+						dataset[key].points = {show:true};
+						/* dataset[key].color = "#F00"; */
+						dataok.push(dataset[key]);
+						
+						nbchart++;
+					}
+					else {
+						var keytostring = String(key);
+						var valuetoint = parseInt(value,10);
+						datatemp.push([keytostring.substr(1),valuetoint]);
+					}
+				}				
+			});
+			var nomtype = "Réservations/";
+			if (type == "w") nomtype += "semaines";
+			if (type == "m") nomtype += "mois";
+			var barsshow = false;
+			var linesshow = true;
+			
+			
+			var options = {
+
+ 				xaxes: [{
+					mode: "categories",
+					/* ticks: [
+					0,[1,"Fev"],2,3,4,5,6,7,8,9,10,11,12
+					], */
+					tickLength: 0,
+					axisLabel: nomtype
+				}],
+				
+				legend: {
+					position: "nw"
+				},
+
+ 				grid: {
+					hoverable: true,
+					clickable: true
+				}  
+			};
+			
+			
+			$.plot($("#global_freq_chart"), dataok, options);
+
+			$("<div id='tooltip'></div>").css({
+				position: "absolute",
+				display: "none",
+				border: "1px solid #fdd",
+				padding: "2px",
+				"background-color": "#fee",
+				opacity: 0.80
+			}).appendTo("body");
+
+			$("#global_freq_chart").bind("plothover", function (event, pos, item) {				
+				if (item) {
+					var x = parseInt(item.datapoint[0].toFixed(2),10),
+						y = parseInt(item.datapoint[1].toFixed(2),10);
+
+					$("#tooltip").html(y)
+						.css({top: item.pageY+8, left: item.pageX+8})
+						.fadeIn(200);
+				} else {
+					$("#tooltip").hide();
+				}				
+			});
+		},
+		error: function(jqXHR, textStatus, errorThrown) {			
+		}
+	});
+};
+
+function test() {
+	var series = 6;
+	for (var i = 0; i < series; i++) {
+			data[i] = {
+				label: "Series" + (i + 1),
+				data: Math.floor(Math.random() * 100) + 1
+			}
+		}
+};
+
+function nbjoueurs_resa_bar_chart() {
+	
+	var datatemp = [];
+	var dataset = {};
+	var dataok = [];
+	
+	dataset["courbe1"] = {};
+	dataset["courbe1"].data = [[2,60],[3,40],[4,50],[5,80],[6,70]];
+	dataset["courbe1"].label = "Nb résa / nb joueurs";
+	dataset["courbe1"].bars = {show:true};
+	dataok.push(dataset["courbe1"]);
+	
+	var options = {
+
+		xaxes: [{
+			min: 2,
+			max: 7,
+ 			ticks: [
+				[ 2, "2" ], [ 3,"3" ],
+				[ 4,"4" ], [ 5,"5" ], [ 6,"6" ], [ 7,"   " ]
+			], 
+			tickDecimals: 0,
+			tickLength: 2,
+			axisLabel: "Nombre de joueurs",
+			labelWidth:5
+		}],
+		
+		legend: {
+			position: "nw"
+		},
+
+		grid: {
+			hoverable: true,
+			clickable: true
+		}  
+	};
+	
+	
+	$.plot($("#nbjoueurs_resa_bar_chart"), dataok, options);
+
+	$("<div id='tooltip'></div>").css({
+		position: "absolute",
+		display: "none",
+		border: "1px solid #fdd",
+		padding: "2px",
+		"background-color": "#fee",
+		opacity: 0.80
+	}).appendTo("body");
+
+	$("#nbjoueurs_resa_bar_chart").bind("plothover", function (event, pos, item) {				
+		if (item) {
+			var x = parseInt(item.datapoint[0].toFixed(2),10),
+				y = parseInt(item.datapoint[1].toFixed(2),10);
+
+			$("#tooltip").html(y)
+				.css({top: item.pageY+8, left: item.pageX+8})
+				.fadeIn(200);
+		} else {
+			$("#tooltip").hide();
+		}				
+	});
+};	

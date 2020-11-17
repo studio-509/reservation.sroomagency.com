@@ -1,0 +1,1 @@
+<html><head><title><?=APP_NAME?></title><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"></head><body><table width="650" border="0" cellspacing="0" cellpadding="0"><tr><td><p><?=$content?></p></td></tr></tr></table></body></html>

@@ -1,0 +1,187 @@
+body {
+	color:#222;
+	line-height:1.5;
+	font-size:12pt;
+	font-family: 'Roboto Slab', serif;
+}
+
+a { cursor:pointer; color:#a40000;}
+
+a:hover { color:#000;}
+
+.clearboth { clear:both;}
+
+/* -------------------------------------------------- */
+/* Header */
+/* -------------------------------------------------- */
+
+#header-wrapper {
+	background:#111;
+}
+
+#header > .wrapper {
+	max-width: 96%;
+}
+
+#logo {
+	padding:0 0;
+	display:block;
+}
+
+.menu.nav {}
+
+.menu.nav  > li {
+	display:block;
+	float:left;
+	margin:0;
+	padding:0;
+}
+
+.menu.nav > li > a {
+    color: #fff!important;
+    display: block;
+	padding:0 10px 0 10px;
+	text-decoration:none;
+    height: 100%;
+    line-height: 60px;
+    text-shadow: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease-out 0s;
+	font-family:'Roboto Slab', serif;
+}
+
+.menu.nav > li > a:hover {
+	color:#fff;
+	background: #a40000;
+	transition: all 0.3s ease-out 0s;
+}
+
+/* -------------------------------------------------- */
+/* Content */
+/* -------------------------------------------------- */
+
+#content {margin:0 100px;color:#222!important;max-width:1180px;margin:auto;}
+body#mobile #content {margin:0 10px;}
+#selectSalle h3 {display:inline-block;}
+#calendar {font-size:16px;}
+.listBtn {padding:0;}
+.listBtn li { display:inline-block;}
+.listBtn li a {display:block; padding:10px; border:1px solid #333333;}
+.listBtn li a:hover {border-color:#a40000;color:#a40000!important;}
+
+.list_voucher > li {border:1px solid #ccc;border-radius:10px;-webkit-border-radius:10px;padding:0 5px;margin:0 5px;max-width:350px;}
+.list_voucher > li > label {font-size:1.3em;}
+.list_voucher > li > label:hover {color:#a40000;cursor:pointer;}
+.list_voucher > li > label.active,
+.list_voucher > li > label:focus,
+.list_voucher > li > label:active {color:#a40000;}
+
+input[type="radio"], 
+input[type="checkbox"] {margin:5px;padding:5px;}
+
+input[type="radio"]:checked {color:#a40000;}
+
+.button.btnRetour {
+	display:block;
+	background:#111;
+	padding:10px;
+	text-align:center;
+	text-decoration:none;
+	border:0px;
+	text-transform:none;
+	color:#fff;
+}
+
+.button.btnRetour:hover {
+	background:#a40000;
+}
+
+.listBtn li._bouton_cal_gauche a,
+.listBtn li._bouton_cal_droite a {border-radius:5px;text-transform:uppercase;font-size:14px;color:#333333;}
+
+a._cal_drop.week:hover,
+a._cal_drop.month:hover,
+a._cal_drop.week:hover,
+a._cal_drop.month:hover {
+text-decoration:none;	
+}
+
+.listBtn li._bouton_cal_gauche a._cal_drop.week {
+	background: url("/assets/img/prev0.png") no-repeat left 10px;
+	padding-left:30px;
+}
+
+.listBtn li._bouton_cal_gauche a._cal_drop.week:hover {
+	background: url("/assets/img/prev0.png") no-repeat left -30px;
+}
+
+.listBtn li._bouton_cal_gauche a._cal_drop.month {
+	background: url("/assets/img/prev1.png") no-repeat left 10px;
+	padding-left:42px;
+}
+
+.listBtn li._bouton_cal_gauche a._cal_drop.month:hover {
+	background: url("/assets/img/prev1.png") no-repeat left -30px;
+}
+
+.listBtn li._bouton_cal_droite a._cal_drop.week {
+	background: url("/assets/img/next0.png") no-repeat right 10px;
+	padding-right:30px;
+}
+
+.listBtn li._bouton_cal_droite a._cal_drop.week:hover {
+	background: url("/assets/img/next0.png") no-repeat right -30px;
+}
+
+.listBtn li._bouton_cal_droite a._cal_drop.month {
+	background: url("/assets/img/next1.png") no-repeat right 10px;
+	padding-right:42px;
+}
+
+.listBtn li._bouton_cal_droite a._cal_drop.month:hover {
+background: url("/assets/img/next1.png") no-repeat right -30px;}
+
+.error, .errorv { color:#ff0000; }
+
+/* -------------------------------------------------- */
+/* Footer */
+/* -------------------------------------------------- */
+
+#footer {
+	background:#a40000;
+	padding:15px 0;
+}
+
+#footer .menu { text-align:center; color:#fff;}
+#footer .menu li { display:inline-block;}
+#footer .menu li:after {
+	display:inline-block;
+	content:"|";
+	margin:0 0.2em;
+}
+
+#footer .menu li:last-child:after {display:none;}
+#footer .menu a { color:#fff; text-decoration:none;}
+#footer .menu a:hover {text-decoration:underline;}
+
+@media all and (max-width: 767px) {
+	.menu.nav.pull-right { float:none!important}
+	.menu.nav > li { display:block; width:100%; border-bottom:1px solid #333;}
+	.menu.nav > li > a { padding:0;}
+	.section-title .line,
+	.section-title .line.big { display:block; margin:4px auto; width:75%;}
+	
+	ul.list_voucher {margin:0;padding:0;}
+	ul.list_voucher > li {float:none;margin:10px;}
+	
+	#content fieldset {margin:10px;}
+}
+
+@media all and (min-width: 991px) {
+	#main { padding-top:60px; padding-bottom:60px;}
+	#header-wrapper,
+	#footer-wrapper { position:fixed; left:0; z-index:500; width:100%;}
+	#header-wrapper { top:0}
+	#footer-wrapper { bottom:0}
+}
+

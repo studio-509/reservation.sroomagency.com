@@ -1,0 +1,1613 @@
+$(document).ready(function() {
+
+	/**
+
+	* suppression reservation
+
+	*/
+
+	$('body').on('click', '._reservation_delete', function() {
+
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+
+		var id = $(this).attr('data-id');
+
+		if ($(this).attr('resindis') == 'resa') {
+
+			var datas = {"titre":"Suppression reservation","txt":"Voulez vous vraiment supprimer la reservation de "+$(this).attr('data-client')+", le "+$(this).attr('data-date')+" pour le scénario "+$(this).attr('data-scenario')+" ?"};
+
+			_inPop.open('/popin/confirm', datas, 'alerte', 'fn_reservation.del('+id+')');
+
+		}
+
+		else {
+
+			var datas = {"titre":"Suppression indisponibilité","txt":"Voulez vous vraiment supprimer cette indisponibilité ?"};
+
+			_inPop.open('/popin/confirm', datas, 'alerte', 'fn_reservation.delindispo('+id+')');
+
+		}
+
+		
+
+	});
+
+	/**
+
+	* update reservation
+
+	*/
+
+	$('body').on('click', '._reservation_update', function(){
+
+		var id = $(this).attr('data-id');
+
+		var hiddensalle = '#hidden'+id;
+
+		var idsalle = $(hiddensalle).attr('data-id');
+
+		$('#id_reservation').val(id);
+
+		$('#resa_cal').trigger('click');
+
+		$('._add_resa').addClass('hidden');
+
+		$('._add_indispo').addClass('hidden');
+
+		$('#sel').removeClass('hidden');
+
+		var datas = {"id_reservation":id,"salle":idsalle,"addResa":1};
+
+		temp = _Ajax.callback('/reservation/admin/Reservationadmin/getResaInfos', datas, 'fn_reservation');
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/infos_up','info_resa' ,datas);
+
+			_Ajax.reload('/reservation/admin/Reservationadmin/calendar', 'calendar', datas);
+
+		
+
+	});
+
+	/**
+
+	* onglets
+
+	*/
+
+	$('._tab_drop').click(function(){
+
+		var tab = '#bloc_' + $(this).attr('id');
+
+		$('._tab_bloc').hide();
+
+		$('._tab_drop').removeClass('button_active');
+
+		$(tab).show();
+
+		$(this).addClass('button_active');
+
+		$('#select_options').show();
+
+		$('#salle_reservation').val('');
+
+		$('#joueurs_reservation').val('');
+
+		if ($(this).attr('id')=='resa_liste') {
+
+			$('#info_resa').html('');
+
+			$('#addIndispo').val(0);
+
+			$('#addResa').val(0);
+
+			$('#formrow').remove();
+
+			$('#sel').addClass('hidden');
+
+			$('._add_indispo,._add_resa').removeClass('hidden');
+
+		}
+
+		else {
+
+			var addIndispo = 0;
+
+			var addResa = 0;
+
+		}
+
+		if (($(this).attr('id')=='resa_cal')) {
+
+			var datas = {"salle":1};
+
+			$('#salle-admin').val('1');
+
+			_Ajax.reload('/reservation/admin/Reservationadmin/calendar', 'calendar', datas);
+
+		}
+
+		
+
+	});
+
+	/**
+
+	* jump semaines
+
+	*/
+
+	$('body').on('click', '._cal_drop', function(){
+
+		var time = $(this).attr('data-id');
+
+		var origine = $(this).attr('data-orig');
+
+		// var link = (origine == 'admin')?'admin/Reservationadmin':'Reservation';
+
+		if (origine == 'admin'){
+
+			var link = 'admin/Reservationadmin';
+
+			var salle = $('#salle-admin option:selected').val();
+
+		} else {
+
+			var link = 'Reservation';
+
+			var salle = $('#salle option:selected').val();
+
+		}
+
+		var datas = {"start":time,"salle":salle,"addIndispo":$('#addIndispo').val(),"addResa":$('#addResa').val()};
+
+
+
+		_Ajax.reload('/reservation/' + link + '/calendar', 'calendar', datas);
+
+	});
+
+	/**
+
+	* jump jour
+
+	*/
+
+	$('body').on('click', '._cal_drop_mobile', function(){
+
+		var time = $(this).attr('data-id');
+
+		var origine = $(this).attr('data-orig');
+
+		var link = (origine == 'admin')?'admin/Reservationadmin':'Reservation';
+
+		var datas = {"start":time};
+
+		_Ajax.reload('/reservation/' + link + '/mobileCalendar', 'calendar', datas);
+
+	});
+
+	/**
+
+	* jump salles front
+
+	*/
+	var a = '';
+	
+	
+	
+	$(document).on('change','#salle',function(){
+		
+		var time = $('#maintiendate').val();
+
+		var id = $('#salle option:selected').val();
+
+		var origine = $(this).attr('data-orig');
+
+		var mobile = ($(this).attr('data-mobile') == 0)?'calendar':'mobileCalendar';
+
+		var link = (origine == 'admin')?'admin/Reservationadmin':'Reservation';
+
+		
+
+		var datas = {'salle':id,'start':time};
+		
+		var obj = { foo: 'bar', baz: 42 };
+		var values = Object.keys(obj).map(function(e) {
+		return obj[e]
+		})
+		console.log(values)
+		
+		if (origine == 'admin'){
+
+			_Ajax.reload('/reservation/Reservation/getNbmax', 'sel', datas);
+
+			_Ajax.reload('/reservation/' + link + '/' + mobile, 'calendar', datas);
+
+		}
+		
+		if(origine == 'front'){
+			alert(a);
+			
+			/* jQuery.ajax({
+				type: 'POST',
+				url: '/reservation/Reservation/index',
+				success: function(data, textStatus, jqXHR) {
+						$('#' + '_calendrier').html(data);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert("error");
+				}
+			}); */
+			
+			//_Ajaxflo.reload('/reservation/Reservation/index','_calendrier');
+			
+			jQuery.ajax({
+			type: 'POST',
+			url: '/reservation/Reservation/changeUri',
+			data: {
+				'salle': id
+			},
+			success: function(data, textStatus, jqXHR) {
+				window.location.href = data;
+				},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("error");
+				}
+			});
+			//_Ajax.change_uri('/reservation/Reservation/changeUri', datas);
+
+			
+			
+		}
+	});
+	
+	/**
+	 * ouverture et fermeture menu mobile
+	 */
+	 
+	jQuery(document).ready(function($){
+    $(".btn-menu-mobile").on("click", function(event) {
+        event.preventDefault();
+		$this=$(this);
+		if($this.hasClass('is-opened'))
+			{
+				$this.addClass('is-closed').removeClass('is-opened');
+			}
+		else
+			{
+				$this.removeClass('is-closed').addClass('is-opened');
+			}
+        $("#nav-mobile").slideToggle("slow");
+        $this.toggleClass("active");
+		});
+	}); 
+	
+	/**
+	 * jump horaire front mobile
+	 */
+ 	$('body').on('touchend click', '._mobile_front_resa', function(){
+		var horaire = $(this).attr('data-hour');
+		var nbjoueurs = $('#joueursMobile option:selected').val();
+		var nom = $('#nom').val();
+		var prenom = $('#prenom').val();
+		var email = $('#email').val();
+		var tel = $('#tel').val();
+		var voucher = $('#voucher').val();
+		var civil = $('#civil option:selected').val();
+		if ($('#dateCalendarMobile').val() != '') {
+			var timestamp = parseInt((new Date($('#dateCalendarMobile').val()).getTime() / 1000).toFixed(0));
+			var maintiendate = timestamp;
+		}
+		else {
+			maintiendate = '';
+		}
+		var id = $('#salle_mobile option:selected').val();
+		jQuery.ajax({
+			type: 'POST',
+			url: '/reservation/Reservation/changeMobileUri',
+			data: {
+				'salle': id,
+				'start':maintiendate,
+				'nbjoueurs':nbjoueurs,
+				'horaire':horaire,
+				'nom':nom,
+				'prenom':prenom,
+				'email':email,
+				'tel':tel,
+				'civil':civil,
+				'voucher':voucher,
+				'jump':'horaire'
+			},
+			success: function(data, textStatus, jqXHR) {
+				window.location.href = data;
+				},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("error");
+				}
+			}); 
+	});
+	
+	
+	/**
+	 * jump date front mobile
+	 */
+ 	$('#dateCalendarMobile').change(function(){
+		var nbjoueurs = $('#joueursMobile option:selected').val();
+		var nom = $('#nom').val();
+		var prenom = $('#prenom').val();
+		var email = $('#email').val();
+		var tel = $('#tel').val();
+		var voucher = $('#voucher').val();
+		var civil = $('#civil option:selected').val();
+		if ($('#dateCalendarMobile').val() != '') {
+			var timestamp = parseInt((new Date($('#dateCalendarMobile').val()).getTime() / 1000).toFixed(0));
+			var maintiendate = timestamp;
+		}
+		else {
+			maintiendate = '';
+		}
+		var id = $('#salle_mobile option:selected').val();
+		jQuery.ajax({
+			type: 'POST',
+			url: '/reservation/Reservation/changeMobileUri',
+			data: {
+				'salle': id,
+				'start':maintiendate,
+				'nbjoueurs':nbjoueurs,
+				'nom':nom,
+				'prenom':prenom,
+				'email':email,
+				'tel':tel,
+				'civil':civil,
+				'voucher':voucher,
+				'jump':'date'
+			},
+			success: function(data, textStatus, jqXHR) {
+				window.location.href = data;
+				},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("error");
+				}
+			}); 
+	}); 
+	
+	/**
+	 * jump nbjoueurs front mobile
+	 */
+	$('#joueursMobile').change(function(){
+		var nom = $('#nom').val();
+		var prenom = $('#prenom').val();
+		var email = $('#email').val();
+		var tel = $('#tel').val();
+		var voucher = $('#voucher').val();
+		var horaire = $('.horaire_mobile_selected').attr('data-hour');
+		var nbjoueurs = $('#joueursMobile option:selected').val();
+		var civil = $('#civil option:selected').val();
+		if ($('#dateCalendarMobile').val() != '') {
+			var timestamp = parseInt((new Date($('#dateCalendarMobile').val()).getTime() / 1000).toFixed(0));
+			var maintiendate = timestamp;
+		}
+		else {
+			maintiendate = '';
+		}
+		var id = $('#salle_mobile option:selected').val();;
+		jQuery.ajax({
+			type: 'POST',
+			url: '/reservation/Reservation/changeMobileUri',
+			data: {
+				'salle': id,
+				'start':maintiendate,
+				'nbjoueurs':nbjoueurs,
+				'horaire':horaire,
+				'nom':nom,
+				'prenom':prenom,
+				'email':email,
+				'tel':tel,
+				'civil':civil,
+				'voucher':voucher,
+				'jump':'nbjoueurs'
+				
+			},
+			success: function(data, textStatus, jqXHR) {
+				window.location.href = data;
+				},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("error");
+				}
+			}); 
+	});
+	
+	/**
+	 * jump salles front mobile
+	 */
+	$('#salle_mobile').change(function(){
+		var nom = $('#nom').val();
+		var prenom = $('#prenom').val();
+		var email = $('#email').val();
+		var tel = $('#tel').val();
+		var voucher = $('#voucher').val();
+		var horaire = $('.horaire_mobile_selected').attr('data-hour');
+		var nbjoueurs = $('#joueursMobile option:selected').val();
+		var civil = $('#civil option:selected').val();
+		if (($('#dateCalendarMobile').val())&&($('#dateCalendarMobile').val() != '')) {
+			var timestamp = parseInt((new Date($('#dateCalendarMobile').val()).getTime() / 1000).toFixed(0));
+			var maintiendate = timestamp;
+		}
+		else {
+			maintiendate = '';
+		}
+		
+		var id = $('#salle_mobile option:selected').val();
+		jQuery.ajax({
+			type: 'POST',
+			url: '/reservation/Reservation/changeMobileUri',
+			data: {
+				'salle': id,
+				'start':maintiendate,
+				'nbjoueurs':nbjoueurs,
+				'horaire':horaire,
+				'nom':nom,
+				'prenom':prenom,
+				'email':email,
+				'tel':tel,
+				'civil':civil,
+				'voucher':voucher,
+				'jump':'salle'
+			},
+			success: function(data, textStatus, jqXHR) {
+				window.location.href = data;
+				},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert("error");
+				}
+			});
+	});
+
+	/**
+
+	* jump salles admin
+
+	*/
+
+	$('#salle-admin').change(function(){
+
+		var addIndispo = $('#addIndispo').val();
+
+		var addResa = $('#addResa').val();
+
+		if ((typeof addIndispo !== 'undefined') && addIndispo==1) {
+
+			$('#indisSel').html('');
+
+			$('#validbuttonarea').remove();
+
+		}
+
+		if (typeof addIndispo == 'undefined') {
+
+			var addIndispo = 0;
+
+		}
+
+		if (typeof addResa == 'undefined') {
+
+			var addResa = 0;
+
+		}
+
+		var id = $('#salle-admin option:selected').val();
+
+		var datas = {"salle":id,'addIndispo':addIndispo,'addResa':addResa};
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/getNbmax', 'sel', datas);
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/calendar', 'calendar', {'start':$('.toto').attr('data-day'),'salle':$('#salle-admin option:selected').val(),'addIndispo':addIndispo,'addResa':addResa});
+
+	});
+
+	/**
+
+	* Affichage formulaire reservation admin
+
+	**/
+
+	$('body').on('click','._add_resa',function(){
+
+		$('#id_reservation').val('');
+
+		addIndispo = 0 ;
+
+		addResa = 1 ;
+
+		$('.calday').css({
+
+			'cursor':'default',
+
+			'text-decoration': 'none'
+
+		});
+
+		if ($('#annulindispo').length) {
+
+			$('#annulindispo').remove();
+
+		}
+
+		$('#sel').removeClass('hidden');
+
+		var nbJoueurs = $('#joueurs').val();
+
+		var datas = {'nbJoueurs':nbJoueurs,'addIndispo':addIndispo,'addResa':addResa};
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/infos_up','info_resa',datas);
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/calendar','calendar',{'start':$('.toto').attr('data-day'),'salle':$('#salle-admin option:selected').val(),'addIndispo':addIndispo,'addResa':addResa});
+
+	});
+
+	/**
+
+	* Champs joueurs xx dynamique
+
+	**/
+
+	$('body').on('change','#joueurs',function(){
+
+		var nbJoueurs = $(this).val();
+
+		for(i=1;i<nbJoueurs;i++){
+
+			$('#form_joueur'+i).show();
+
+		}
+
+		for(i=5;i>=nbJoueurs;i--){
+
+			$('#form_joueur'+i).hide();
+
+		}
+
+	});
+
+
+
+	/**
+
+	* update client
+
+	*/
+
+	$('body').on('click', '#_submit_resa_admin_form', function(){
+
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+
+		$('.error').each(function(){
+
+			if($(this).is(':visible'))$(this).hide();
+
+		});
+
+		$('.bg_error').each(function(){
+
+			$(this).removeClass('bg_error');
+
+		});
+
+		var required = _tools.required('resa_admin_form');
+
+		var format_email = _tools.format_email('resa_admin_form');
+
+		var voucher = $('#voucher').val();
+
+		var error = 0;
+
+		if(voucher != ''){
+
+			jQuery.ajax({
+
+				type: 'POST',
+
+				url: '/voucher/test',
+
+				data: {
+
+					'voucher': voucher
+
+				},
+
+				success: function(data, textStatus, jqXHR) {
+
+					if(data == 0){
+
+						error = 1;
+
+						$('#error_voucher').show();
+
+					}
+
+				},
+
+				error: function(jqXHR, textStatus, errorThrown) {
+
+					alert("error");
+
+				}
+
+			});
+
+		}
+
+		if(required == 0 && format_email == 0 && error == 0){
+
+			var id = $('#id_reservation').val();
+
+			var civil = $('#civil option:selected').val();
+
+			var nom = $('#nom').val();
+
+			var prenom = $('#prenom').val();
+
+			var email = $('#email').val();
+
+			var tel = $('#tel').val();
+
+			var pass = $('#password').val();
+
+			var login = $('#login').val();
+
+			var old_pass = $('#old_pass').val();
+
+			var jour = $('#jour_resa').val();
+
+			var horaire = $('#horaire_resa').val();
+
+			var salle = ($('#salle_reservation').val() != '')?$('#salle_reservation').val():$('#salle-admin option:selected').val();
+
+			var joueurs = ($('#joueurs_reservation').val() != '')?$('#joueurs_reservation'):$('#joueurs option:selected').val();
+
+			var reglement = $('input[name=reglement]:checked').val();
+
+			var j1 = $('#joueur1').val();
+
+			var j2 = $('#joueur2').val();
+
+			var j3 = $('#joueur3').val();
+
+			var j4 = $('#joueur4').val();
+
+			var j5 = $('#joueur5').val();
+
+			var titre = (id == '')?'Ajout réservation':'Modification réservation';
+
+			var link = (id == '')?'add':'update';
+
+			var datas = {"titre":titre,"id":id,"civil":civil,"nom":nom,"prenom":prenom,"email":email,"tel":tel,"login":login,"password":pass,"old_pass":old_pass,"jour":jour,"horaire":horaire,"salle":salle,"joueurs":joueurs,"joueur1":j1,"joueur2":j2,"joueur3":j3,"joueur4":j4,"joueur5":j5,"reglement":reglement};
+
+			// DEBUG
+
+			// alert(jour);
+
+			_Ajax.send('/reservation/admin/Reservationadmin/' + link, datas);
+
+		}
+
+	});
+
+	// règlement sur place
+
+	$('body').on('click', '._reservation_paid', function(){
+
+		var id = $(this).attr('data-id');
+
+		var datas = {"id":id};
+
+		_Ajax.send('/reservation/admin/Reservationadmin/paid', datas);
+
+		$('#_tr' + id).removeClass('resa_alerte');
+
+	});
+
+	/**
+	* formulaire réservation front
+	*/
+	$('body').on('click', '._front_resa', function(){
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+		var datefr = $(this).attr('data-day');		
+		var jour = datefr.substring(0,2);		
+		var mois = datefr.substring(3,5);		
+		var annee = datefr.substring(6,10);		
+		var dateus = annee+"-"+mois+"-"+jour;
+		var horaire = $(this).attr('data-hour');
+		var joueurs = $('#joueurs option:selected').val();
+		var salle = $('#salle option:selected').val();		
+		var sallenom = $('#salle option:selected').text();
+		for (i=1; i<6; i++) {
+				$('#lijoueur'+i).hide();
+		}
+		if (joueurs == 0) {		
+			$('#error_nombre_joueurs').removeClass('masque2');
+		}
+		else {
+			var i=1;
+			for (i=1; i<joueurs; i++) {
+				$('#lijoueur'+i).show();
+			}
+			$('#error_nombre_joueurs').addClass('masque2');
+			$('#jour_resa_titre_form').html(datefr);
+			$('#heure_resa_titre_form').html(horaire);
+			$('#nom_salle_resa_titre_form').html(sallenom);
+			$('#nb_joueurs_titre_form').html(joueurs);
+			$('#jour_resa').val(dateus);
+			$('#horaire_resa').val(horaire);
+			$('#id_room').val(salle);
+			$('#_calendrier').addClass('hidden');
+			$('#_resa_form').removeClass('hidden');			
+		}
+	});
+	
+	/**
+	* Annulation formulaire client
+	*/
+	$('body').on('click', '#_cancel_resa_front_form', function(){
+		$('#_calendrier').removeClass('hidden');
+		$('#_resa_form').addClass('hidden');		
+	});
+	
+	/**
+	* validation formulaire client
+	*/
+	$('body').on('click', '#_submit_resa_front_form', function(){
+		$('.error').each(function(){
+
+			if($(this).is(':visible'))$(this).hide();
+
+		});
+
+		$('.bg_error').each(function(){
+
+			$(this).removeClass('bg_error');
+
+		});
+
+		var required = _tools.required('resa_front_form');
+
+		var format_email = _tools.format_email('resa_front_form');
+
+		if(required == 0 && format_email == 0){
+
+			var civil = $('#civil option:selected').val();
+
+			var nom = $('#nom').val();
+
+			var prenom = $('#prenom').val();
+
+			var email = $('#email').val();
+
+			var tel = $('#tel').val();
+
+			var pass = $('#password').val();
+
+			var login = $('#login').val();
+
+			var old_pass = $('#old_pass').val();
+
+			var jour = $('#jour_resa').val();
+
+			var horaire = $('#horaire_resa').val();
+
+			var salle = $('#salle option:selected').val();
+
+			var joueurs = $('#joueurs option:selected').val();
+
+			var id_resa = $('#reservation_id').val();
+
+			var client_id = $('#client_id').val();
+
+			var voucher = $('#voucher').val();
+
+			var j1 = $('#joueur1').val();
+
+			var j2 = $('#joueur2').val();
+
+			var j3 = $('#joueur3').val();
+
+			var j4 = $('#joueur4').val();
+
+			var j5 = $('#joueur5').val();
+
+			var datas = {"id_resa":id_resa,"client_id":client_id,"civil":civil,"nom":nom,"prenom":prenom,"email":email,"tel":tel,"login":login,"password":pass,"old_pass":old_pass,"jour":jour,"horaire":horaire,"salle":salle,"voucher":voucher,"joueurs":joueurs,"joueur1":j1,"joueur2":j2,"joueur3":j3,"joueur4":j4,"joueur5":j5};
+		
+			var infosok = 'ok';
+			
+		}
+		
+		else {
+			//$('html, body').animate({ scrollTop: 0 }, 'fast');
+		}
+		
+		///
+
+		var salle = $('#id_room').val();
+
+		var voucher = $('#voucher').val();
+
+
+		$('#voucherrow .error').each(function(){
+
+			if($(this).is(':visible'))$(this).hide();
+
+		});
+		if (voucher.length > 0) {
+			
+			jQuery.ajax({
+
+				type: 'POST',
+
+				url: '/voucher/test',
+
+				data: {
+
+					'voucher': $('#voucher').val(),
+
+					'salle': salle
+
+				},
+
+				success: function(data, textStatus, jqXHR) {
+
+					switch (data) {
+
+						case '0':
+						
+						$('#voucher').addClass('bg_error');
+						$('#error_voucher').show();
+						$('#voucher').val('');
+
+						break;
+
+						case '1':
+						
+						$('#voucher').addClass('bg_error');
+						$('#used_voucher').show();
+						$('#voucher').val('');
+
+						break;
+
+						case '2':
+						
+						$('#voucher').addClass('bg_error');
+						$('#passed_voucher').show();
+						$('#voucher').val('');
+
+						break;
+
+						case '3':
+
+						$('#voucher').addClass('bg_error');
+						$('#notthisroom_voucher').show();
+						$('#voucher').val('');
+
+						break;
+
+						case '4':
+							if (infosok == 'ok') {
+								//$('html, body').animate({ scrollTop: 0 }, 'fast');
+								_Ajax.reload('/reservation/add', '_resa_recap_flo', datas);
+								$('#_resa_recap_flo').removeClass('hidden');
+								$('#_resa_form').addClass('hidden');
+							}
+
+						break;
+
+					}
+
+				},
+
+				error: function(jqXHR, textStatus, errorThrown) {
+
+					alert("error");
+
+				}
+
+			});
+		}
+		else {
+			
+			if (infosok == 'ok') {
+				//$('html, body').animate({ scrollTop: 0 }, 'fast');	
+				_Ajax.reload('/reservation/add', '_resa_recap_flo', datas);
+				$('#_resa_recap_flo').removeClass('hidden');
+				$('#_resa_form').addClass('hidden');
+			}
+		}
+
+	});
+
+	/**
+
+	* Annulation reservation
+
+	*/
+
+	$('body').on('click', '._reset_resa', function(){
+
+		var id = $(this).attr('data-id');
+
+		var datas = {"titre":"Suppression reservation","txt":"Voulez vous vraiment abandonner la réservation en cours ?","id":id};
+
+		_inPop.open('/popin/confirm', datas, 'alerte', 'fn_reservation.delFront('+id+')', 'fn_reservation.reload('+id+')');
+
+	});
+
+	/**
+
+	* validation reservation
+
+	*/
+
+	$('body').on('click', '._order_process', function(){
+
+		$('#error_cgv').hide();
+
+		if($('#order_cgv').prop('checked') === false){
+
+			$('#error_cgv').show();
+
+		}
+
+		else{
+
+			_Ajax.order('/reservation/order', {"id":$(this).attr('data-id')}, 'fn_reservation');
+
+		}
+
+	});
+
+	$('body').on('click', '._order_admin_process', function(){
+
+		_Ajax.order('/reservation/order', {"id":$(this).attr('data-id')}, 'fn_reservation');
+
+	});
+
+	/**
+
+	* modification reservation
+
+	*/
+
+	$('body').on('click', '._modif_resa', function(){
+
+		_Ajax.send('/reservation/Reservation/modif', {"id":$(this).attr('data-id')});
+		$('#reservation_id').val($(this).attr('data-id'));
+		$('#client_id').val($('#id_client_recap').val());
+		$('#_resa_recap_flo').addClass('hidden');
+		$('#_calendrier').removeClass('hidden');
+
+
+	});
+
+
+
+	/**
+
+	* Gestion resultat / page
+
+	**/
+
+	$('body').on('change','._pag_setup', function(){
+
+		var datas = {'pag':$(this).val()};
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/listing','bloc_resa_liste',datas);
+
+		// $('#bloc_resa_cal').hide();
+
+	});
+
+	
+
+	/**
+
+	* Gestion basscule réservations / indispos
+
+	**/
+
+	$('body').on('change','._res_indispo', function(){
+
+		var datas = {'resindis':$(this).val()};
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/listing','bloc_resa_liste',datas);
+
+		// $('#bloc_resa_cal').hide();
+
+	});
+
+
+
+
+
+	/**
+
+	* Gestion indisponibilités
+
+	*/
+
+	$('body').on('click','._add_indispo',function(){
+
+		$('#sel').addClass('hidden');
+
+		console.log('click');
+
+		addIndispo = 1;
+
+		addResa = 0;
+
+		$('#info_resa').html('Selectionnez le jour/ou le créneau horaire :<div id="indisSel" style="color:red;"></div><div id="checkall"></div><div id="annulindispo"><a class="button btn_L btn_annul mt32 _annul_resaindis">Annuler</a></div>');
+
+		//if ($('#annulindispo').length < 1) {
+
+		//	$('<div id="annulindispo"><a class="button btn_L btn_annul mt32" href="/admin/reservations">Annuler</a>  </div>').appendTo('#cancel_area');
+
+		//}
+
+		$('.calday').css({
+
+			'cursor':'pointer',
+
+			'text-decoration': 'underline'
+
+		});
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/calendar','calendar',{'start':$('.toto').attr('data-day'),'salle':$('#salle-admin option:selected').val(),'addIndispo':addIndispo,'addResa':addResa});
+
+		//$('._add_indispo,._add_resa').addClass('hidden');
+
+	});
+
+	
+
+	/**
+
+	* Gestion annulation création résa/indispo admin
+
+	*/
+
+	$('body').on('click','._annul_resaindis',function(){
+
+		addIndispo = 0;
+
+		addResa = 0;
+
+		$('#sel').addClass('hidden');
+
+		$('.calday').css({
+
+			'cursor':'default',
+
+			'text-decoration': 'none'
+
+		});
+
+		if ($('#annulindispo').length) {
+
+			$('#annulindispo').remove();
+
+		}
+
+		$('#info_resa').html('');
+
+
+
+		_Ajax.reload('/reservation/admin/Reservationadmin/calendar','calendar',{'start':$('.toto').attr('data-day'),'salle':$('#salle-admin option:selected').val(),'addIndispo':0,'addResa':0});
+
+	});
+
+
+	
+	/**
+
+	* Gestion sélection d'un jour complet pour une indispo
+
+	*/
+	$('body').on('click','.calday',function(e){
+
+		$('#checkall').html('<div id="checkcheckall"><input type="checkbox" name="allRoom" id="allRoom">Toutes les salles</div>');
+
+		if(typeof addIndispo == 'undefined' || addIndispo == 0){
+
+			e.preventDefault();
+
+			return;
+
+		}
+
+		var jour = $(this).attr('data-day');
+
+		var jour_fr = new Date(jour);
+
+		$('#indisSel').html('le '+ jour_fr.toLocaleDateString('fr-FR') + ' sur tous les créneaux horaires');
+
+		if(!$('._valid_indispo').length){
+
+			$('<div class="col-md-3 col-md-offset-3 text-center"><button class="_valid_indispo button ">Valider</button></div>').appendTo('#info_resa');
+
+		}
+
+		indispo = jour;
+
+	});
+
+
+	/**
+
+	* Gestion bouton validation création indispo
+
+	*/
+	$('body').on('click','._valid_indispo',function(){
+
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+
+		var txt = '';
+
+		if (indispo.length == 10){
+
+			var dateIn = new Date(indispo);
+
+			txt = dateIn.toLocaleDateString('fr-FR');
+
+		} else if (indispo.length == 16){
+
+			var dateIn = new Date(indispo+':00');
+
+			txt = dateIn.toLocaleString('fr-FR');
+
+		}
+
+		if($('#allRoom').is(':checked')){
+
+			txt += ' sur toutes les salles ';
+
+			salle = 'all';
+
+		} else {
+
+			txt += ' sur la salle "'+$('#salle-admin option:selected').html()+'"';
+
+			salle = $('#salle-admin option:selected').val();
+
+		}
+
+		var datas = {'indispo':indispo,"titre":"Indisponibilité","txt":"Voulez vous rendre indisponible le "+txt+" ?"};
+
+		_inPop.open('/popin/confirm', datas, 'alerte', 'fn_reservation.setIndispo("'+indispo+'","'+salle+'")');
+
+	});
+	
+	
+	/**
+	
+	*Gestion des checkbox pour impression fiche d'aventure
+	
+	*/
+	$('body').on('change','._check_fiche',function() {
+		
+		var lienfiche;
+		
+		if ($(this).is(':checked')) {
+			if (!$('#sheet_create').attr('href')) {
+				$('#sheet_create').attr('href','https://'+window.location.host+'/reservation/admin/Reservationadmin/printfiche/');
+				$('#sheet_create').attr('target','_blank');
+			}
+			lienfiche = $('#sheet_create').attr('href');
+			lienfiche += $(this).val()+'|';
+			$('#sheet_create').attr('href',lienfiche);
+		}
+		
+		else {
+			if($('input:checked').length == 0) {
+				$('#sheet_create').removeAttr('href');
+				$('#sheet_create').removeAttr('target');
+			}
+			else {
+				lienfiche = $('#sheet_create').attr('href');
+				var searchstring = $(this).val()+'|';
+				lienfiche = lienfiche.replace(searchstring, '');
+				$('#sheet_create').attr('href',lienfiche);
+			}
+		}
+	});
+	
+	/**
+	
+	*Gestion clic impression de feuille d'aventure quand pas de checkbox
+	
+	*/
+	$('body').on('click','#sheet_create',function() {
+		if ($('input:checked').length == 0) {
+			alert("Aucune réservation n'est sélectionnée");
+		}
+	});
+
+	
+	
+	if((document.URL).search('admin') != -1){
+
+	$.getScript("reservationadmin.js", function(){
+
+
+
+	   alert("Script loaded but not necessarily executed.");
+
+
+
+	});}
+
+
+
+});
+
+var fn_reservation = {
+
+	add : function(){
+
+		var civil = $('#civil option:selected').val();
+
+		var nom = $('#nom').val();
+
+		var prenom = $('#prenom').val();
+
+		var email = $('#email').val();
+
+		var tel = $('#tel').val();
+
+		var jour = $('#jour_resa').val();
+
+		var horaire = $('#horaire_resa').val();
+
+		var salle = $('#salle-admin option:selected').val();
+
+		var joueurs = $('#joueurs option:selected').val();
+
+		var j1 = $('#joueur1').val();
+
+		var j2 = $('#joueur2').val();
+
+		var j3 = $('#joueur3').val();
+
+		var j4 = $('#joueur4').val();
+
+		var j5 = $('#joueur5').val();
+
+		var reglement = $('input[name=reglement]:checked').val();
+
+		console.log(salle);
+
+		console.log('add');
+
+		var datas = {"titre":"Ajout d'une réservation","civil":civil,"nom":nom,"prenom":prenom,"email":email,"jour":jour,"horaire":horaire,"salle":salle,"tel":tel,"joueurs":joueurs,"joueur1":j1,"joueur2":j2,"joueur3":j3,"joueur4":j4,"joueur5":j5,"reglement":reglement};
+
+		_inPop.open('/reservation/admin/Reservationadmin/add',datas);
+
+	},
+
+	setIndispo : function(indispo){
+
+		var datas = {'titre':'Indisponibilité','txt':'L\'indisponibilité a été créée avec succès','indispo':indispo,'salle':salle};
+
+		_inPop.open('/reservation/admin/Reservationadmin/setIndispo',datas,'alerte');
+
+	},
+
+	del : function(id){
+
+		var datas = {"titre":"Suppression reservation","txt":"La reservation à bien été supprimée","id":id};
+
+		_inPop.open('/reservation/admin/Reservationadmin/delete', datas, 'alerte');
+
+		$('#_tr'+id).slideUp(500);
+
+	},
+
+	delindispo : function(id){
+
+		var datas = {"titre":"Suppression indisponibilité","txt":"L'indisponibilité à bien été supprimée","id":id};
+
+		_inPop.open('/reservation/admin/Reservationadmin/delete', datas, 'alerte');
+
+		$('#_tr'+id).slideUp(500);
+
+	},
+
+	delFront : function(id){
+
+		var datas = {"titre":"Suppression reservation","txt":"Votre réservation à bien été supprimée","id":id};
+
+		_inPop.open('/reservation/admin/Reservationadmin/delete', datas, 'alerte');
+
+	},
+
+	reload : function(id){
+
+		var datas = {"id":id};
+
+		_inPop.open('/reservation/reload', datas);
+
+	},
+
+	callback : function(data){
+
+		data = JSON.parse(data);
+
+		$('select#salle-admin').val(data.salle);
+
+		$('select#joueurs').val(data.nbJoueurs);
+
+		// $('#select_options').hide();
+
+	},
+
+	order : function(data){
+
+		data = JSON.parse(data);
+
+		$('#formOrder').html(data.form);
+
+		$('#PaymentRequest').submit();
+
+	},
+
+
+
+};
+
+function testRadio() {
+
+	var bouton = document.getElementsByName('horaire');
+
+	var Nbr = bouton.length;
+
+	var ok = 0;     // Recup du nombre de radio bouton
+
+	for (var i=0; i < Nbr; i++) {      // Parcours les elements
+
+		if (bouton[i].checked === true)
+
+		ok += 1;
+
+	}
+
+	if(ok === 0)
+
+	return false;
+
+	else
+
+	return true;
+
+}
+
+function valideForm1(form){
+	
+	$('.error').each(function(){
+		if($(this).is(':visible'))$(this).hide();
+	});
+	
+	$('input[type=text]').each(function() {
+		$(this).removeClass('bg_error');
+	});
+	
+	$('input[type=date]').each(function() {
+		$(this).removeClass('bg_error');
+	});
+	
+	$('select').each(function() {
+		$(this).removeClass('bg_error');
+	});
+	
+	var erroranchor = '';
+	
+	
+	var voucher = $('#voucher').val();
+	
+	if(form.joueur1.value && !bonmail(form.joueur1.value)){
+		$('#joueur1').addClass('bg_error');
+		$('#error_mail_valid_joueur1').show();
+		erroranchor = '#emailsJoueurs';
+	}
+
+	if(form.joueur2.value && !bonmail(form.joueur2.value)){
+		$('#joueur2').addClass('bg_error');
+		$('#error_mail_valid_joueur2').show();
+		erroranchor = '#emailsJoueurs';
+	}
+
+	if(form.joueur3.value && !bonmail(form.joueur3.value)){
+		$('#joueur3').addClass('bg_error');
+		$('#error_mail_valid_joueur3').show();
+		erroranchor = '#emailsJoueurs';
+	}
+
+	if(form.joueur4.value && !bonmail(form.joueur4.value)){
+		$('#joueur4').addClass('bg_error');
+		$('#error_mail_valid_joueur4').show();
+		erroranchor = '#emailsJoueurs';
+	}
+
+	if(form.joueur5.value && !bonmail(form.joueur5.value)){
+		$('#joueur5').addClass('bg_error');
+		$('#error_mail_valid_joueur5').show();
+		erroranchor = '#emailsJoueurs';
+	}
+	
+	if(!form.nom.value) {
+		$('#nom').addClass('bg_error');
+		$('#error_nom').show();
+		erroranchor = '#coordonnees';
+	}
+
+	if(!form.prenom.value){
+		$('#prenom').addClass('bg_error');
+		$('#error_prenom').show();
+		erroranchor = '#coordonnees';
+	}
+	if(!form.email.value){
+		$('#email').addClass('bg_error');
+		$('#error_mail').show();
+		erroranchor = '#coordonnees';
+	}
+
+	if(!bonmail(form.email.value)){
+		$('#email').addClass('bg_error');
+		$('#error_mail_valid').show();
+		erroranchor = '#coordonnees';
+	}
+
+	if(!form.tel.value){
+		$('#tel').addClass('bg_error');
+		$('#error_tel').show();
+		erroranchor = '#coordonnees';
+	}
+
+	if(form.tel.value && !valider_numero(form.tel.value)){
+		$('#tel').addClass('bg_error');
+		$('#error_tel_valid').show();
+		erroranchor = '#coordonnees';
+	}
+	
+	if(!form.horaire.value) {
+		$('#error_horaire').show();
+		erroranchor = '#selectHoraire';
+	}
+	
+	if(!form.jour.value) {
+		$('#dateCalendarMobile').addClass('bg_error');
+		$('#error_date').show();
+		erroranchor = '#selectDate';
+	}
+	
+	if(!form.joueurs.value) {
+		$('#joueursMobile').addClass('bg_error');
+		$('#error_nbjoueurs').show();
+		erroranchor = '#selectNbjoueurs';
+	}
+	
+	if(!form.salle.value) {
+		$('#salle_mobile').addClass('bg_error');
+		$('#error_scenario').show();
+		erroranchor = '#selectSalle';
+	}
+	
+	var salle = form.salle.value;
+	
+	if(erroranchor !== '') $('html, body').animate({scrollTop: $(erroranchor).offset().top}, 800);
+
+	else {
+		if (voucher.length > 0) {
+			jQuery.ajax({
+				type: 'POST',
+				url: '/voucher/test',
+				data: {
+					'voucher': voucher,
+					'salle': salle
+				},
+				success: function(data, textStatus, jqXHR) {
+					erroranchor = '#voucherSelect';
+					switch (data) {
+
+						case '0':
+						$('#voucher').addClass('bg_error');
+						$('#error_voucher').show();
+						$('html, body').animate({scrollTop: $(erroranchor).offset().top}, 800);
+						break;
+
+						case '1':
+						$('#voucher').addClass('bg_error');
+						$('#used_voucher').show();
+						$('html, body').animate({scrollTop: $(erroranchor).offset().top}, 800);
+						break;
+
+						case '2':
+						$('#voucher').addClass('bg_error');
+						$('#passed_voucher').show();
+						$('html, body').animate({scrollTop: $(erroranchor).offset().top}, 800);
+						break;
+
+						case '3':
+						$('#voucher').addClass('bg_error');
+						$('#notthisroom_voucher').show();
+						$('html, body').animate({scrollTop: $(erroranchor).offset().top}, 800);
+						break;
+
+						case '4':
+							form.submit();	
+						break; 
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert("error");
+				}
+			});
+		} 
+		else form.submit();	
+	}
+
+}
+
+function verifMobileCgv(form){
+
+	if(document.getElementById('order_cgv').checked === true){
+
+		form.submit();
+
+	}
+
+	else{
+
+		alert('Vous devez accepter les conditions générales de vente');
+
+	}
+
+}
+
+function bonmail(mailteste){
+
+	var reg = new RegExp('^[a-z0-9]+([_|\.|-]{1}[a-z0-9]+)*@[a-z0-9]+([_|\.|-]{1}[a-z0-9]+)*[\.]{1}[a-z]{2,6}$', 'i');
+
+	if(reg.test(mailteste)){
+
+		return(true);
+
+	}
+
+	else{
+
+		return(false);
+
+	}
+
+}
+
+function valider_numero(nombre) {
+
+	var chiffres = nombre.toString();
+
+	chiffres = chiffres.replace(/[^0-9]/g, '');
+
+	compteur = chiffres.length;
+
+	if (compteur!=10)
+
+	return false;
+
+	else
+
+	return true;
+
+}
+
+function isEmpty( el ){
+
+	return !$.trim(el.html());
+
+}
+

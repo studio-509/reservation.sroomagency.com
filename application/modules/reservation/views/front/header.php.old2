@@ -1,0 +1,37 @@
+<body class="_front">
+
+	<?php echo modules::run('popin/front/Popin/index',$this->data); ?>
+    <div id="global">
+    	<div id="header-wrapper" class="wrapper bgcolor01">
+            <header id="header" class="container">
+            	<div class="col-xs-12 col-sm-4">
+                	<a id="logo" href="<?php echo APP_URL; ?>"><img src="/assets/img/logo-secret-room-agency.png" alt="Escape Game S ROOM AGENCY MONTAUBAN"/></a>
+                </div>
+				
+                <div class="col-xs-12 col-sm-8">
+                    
+                        <ul class="menu nav  pull-right ">
+                            <li class=""><a href="<?php echo APP_URL; ?>" title="" class="int-collapse-menu">Accueil</a></li>
+                            <li class="active"><a href="<?php echo APP_URL; ?>#concept" title="" class="int-collapse-menu">Le concept</a></li>
+                            <li class=""><a href="<?php echo APP_URL; ?>#missions" title="" class="int-collapse-menu">Nos Missions</a></li>
+							<li class=""><a href="<?php echo APP_URL; ?>/voucher" title="" class="int-collapse-menu">Cadeau</a></li>
+							<li class=""><a href="<?php echo APP_URL; ?>#tarifs" title="" class="int-collapse-menu">Tarifs</a></li>
+                            <li class=""><a href="<?php echo APP_URL; ?>#faq" title="" class="int-collapse-menu">FAQ</a></li>
+                            <li class=""><a href="<?php echo APP_URL; ?>#contact" title="" class="int-collapse-menu">Contact</a></li>
+                        </ul>	
+
+                </div>
+            </header>
+            	
+        </div>
+        
+        <section id="main-wrapper" class="wrapper mb48">
+            <div id="main" class="clearfix">
+            	<section id="content" class="clearfix">
+                		<div class="titleWrapper">
+							<h2>ESCAPE GAME Montauban</h2>
+							<h1>Réserver</h1>
+							<h3>s room agency</h3>
+						</div>
+				
+<!--fin header-->

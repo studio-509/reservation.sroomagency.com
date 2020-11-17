@@ -1,0 +1,36 @@
+label em { font-style: italic;font-weight: normal;}
+
+.table_wrapper{
+    display: inline-block;
+    width: 96%;
+    height: auto;
+    margin: 2%;
+}
+.table_wrapper.first{
+    /*position: relative;*/
+}
+.table_wrapper.slide{
+    /*position: absolute;*/
+}
+
+th .date_set{float:left; margin:5px 8px;}
+th .next_set {cursor:pointer; float:right; margin: 5px 10px;}
+th .prev_set {cursor:pointer; float: left;margin: 5px 10px;}
+tr {position: relative;};
+span.date_set a._set_date_update{
+	font-size: 12px;
+	text-decoration: none;
+	color: #fff;
+	text-transform: none;
+}
+.alert-warning {position: relative;color: #666;border-color: rgba(255,255,255,0);}
+.alert-warning div  {display: inline-block;font-size: 14px;
+vertical-align: middle;
+color: #000;}
+.alert-warning div.warning-sign {width: 30px;
+height: 30px;
+background: url(../../../img/warning.png);
+background-size: cover;
+background-position: center center;
+line-height: 40px;
+margin: 0 15px 0 0;}

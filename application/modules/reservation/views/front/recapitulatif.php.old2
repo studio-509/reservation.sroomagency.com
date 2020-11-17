@@ -1,0 +1,72 @@
+<!-- <?php if($prix == 0 ){
+    ?>
+    <h1>Erreur</h1>
+    <?php
+} else {
+    ?> -->
+
+<div class="row">
+  <div class="col-xs-12 col-sm-6">
+    <h3>Mes coordonnées</h3>
+    <ul class="list_form">
+      <li><?=$civil . ' ' . $prenom . ' ' . $nom?></li>
+      <li><?=$email?></li>
+      <li><?=$tel?></li>
+    </ul>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <h3>Ma réservation</h3>
+    <ul class="list_form">
+      <li class="ttAventure"><?=$room->nom?></li>
+      <li>Le <?=dateFr($jour)?> à <?=$horaire?></li>
+      <li>Nombre de participants : <span class="rappelPrix"><?=$joueurs?></span></li>
+      <li>Montant de la réservation : <span class="rappelPrix"><?=number_format($prix,2,',','')?> €</span></li>
+      <?php if($remise != 0 || $montant_voucher != 0): ?>
+        <li>Montant de votre réduction : <span class="rappelPrix"><?=number_format($remise+$montant_voucher,2,',',' ')?> €</span></li>
+      <?php endif; ?>
+      <li class="ttAventure">Montant à régler : <span class="rappelPrix"><?=number_format($total,2,',',' ')?> €</span></li>
+      <ul class="list_form">
+      </div>
+      <div class="col-xs-12">		<?php		$titreagents = FALSE;		          for($i = 1; $i < PLAYERS_MAX; $i++)          {            $var = 'joueur' . $i;            if(isset($$var) && $$var != '') $titreagents = TRUE;          }		  		  if ($titreagents == TRUE) echo "<h3>E-mails des agents de mon équipe</h3>";          ?> 
+        <span>
+          <?php
+          for($i = 1; $i < PLAYERS_MAX; $i++)
+          {
+            $var = 'joueur' . $i;
+            if(isset($$var) && $$var != '')
+            echo $$var . '<br />';
+          }
+          ?>
+        </span>
+      </div>
+    </div>
+    <p class="lireCGV mt16 mb16">
+      <input type="checkbox" name="cgv" id="order_cgv" value="1"> J’ai lu et j’accepte les conditions générales de vente associées à ma réservation <a href="http://www.sroomagency.com/" title="Voir les CGV" target="_blank">(voir les CGV)</a>
+      <p class="error masque2" id="error_cgv">Vous devez accepter les conditions générales de vente !</p>
+    </p>
+    <p class="lireCGV mt16 mb16">
+      Pour modifier vos coordonnées ou les adresses emails de vos coéquipiers cliquez sur "Modifier ma réservation".<br />
+      Pour changer d'aventure, d'horaire ou le nombre de participants, cliquez sur "Annuler ma réservation".
+    </p>
+    <div class="row">
+      <div class=" col-xs-12 col-sm-6 pull-right">
+        <?php if($total > 0): ?>
+          <a class="_order_process button btnValider" data-id="<?=$id?>">Procéder au paiement</a>
+        <?php else: ?>
+          <form name="voucherOk" method="post" action="/reservation/orderOk">
+            <input type="hidden" name="id_resa" value="<?=$id?>" />
+			
+			<input type="hidden" name="voucher" value="<?=$voucher?>" />
+			<input type="hidden" name="partieofferte" value="ok" />
+            <input type="submit" class="form-submit button btnValider" value="Valider ma réservation" />
+          </form>
+        <?php endif; ?>
+      </div>
+	  <input type="hidden" name="id_client" id="id_client_recap" value="<?=$client_id?>" />
+      <div class=" col-xs-12 col-sm-6">
+        <a class="_modif_resa button btn_L btn_annul mt32" data-id="<?=$id?>">Modifier ma réservation</a>
+        <a class="_reset_resa button btn_L btn_annul mt32" data-id="<?=$id?>">Annuler ma réservation</a>
+      </div>
+    </div>
+    <div id="formOrder"></div>
+    <!-- <?php } ?> -->

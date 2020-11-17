@@ -1,0 +1,66 @@
+<div class=" mb64">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<?php echo $pagination;  ?>
+			</div>
+			<div class="col-md-2 mt16">
+				<label>Résultats par page</label>
+				<select class="_pag_setup" name="">
+					<option value="10" <?=($pag == 10)?'selected="selected"':'' ?>>10</option>
+					<option value="50" <?=($pag == 50)?'selected="selected"':'' ?>>50</option>
+					<option value="100" <?=($pag == 100)?'selected="selected"':'' ?>>100</option>
+				</select>
+			</label>
+		</div>
+	</div>
+<table id="table_annonces" class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="col01 first _order_title <?=($orderby == "id")?'_order_by':''?>" data-id="id">ID</th>
+				<th class="col02 ">Civil</th>
+				<th class="col02 _order_title <?=($orderby == "prenom")?'_order_by':''?>" data-id="prenom">Prénom</th>
+				<th class="col02 _order_title <?=($orderby == "nom")?'_order_by':''?>" data-id="nom">Nom</th>				
+				<th class="col03 _order_title <?=($orderby == "email")?'_order_by':''?>" data-id="email">Email</th>
+				<th class="col04 ">Tel</th>
+				<th class="col07 last">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$i = 0;
+			foreach($clients as $val){
+				$class = ($i%2 == 0)?"even":"odd";
+				?>
+				<tr class="<?php echo $class; ?>" id="_tr<?=$val->id?>">
+					<td class="col01 first"><?=$val->id?></td>
+					<td class="col02"><?=$val->civil?></td>
+					<td class="col02"><?=$val->prenom?></td>
+					<td class="col02"><?=$val->nom?></td>
+					<td class="col03"><?=$val->email?></td>
+					<td class="col04"><?=$val->tel?></td>
+					<td class="col07 last">
+						<ul class="list-action">
+							<li><a class="btn_actions btn_details _client_add_update" data-id="<?=$val->id?>"><img src="<?php echo APP_URL; ?>/assets/img/picto-action-modifier.png" title="Modifier" alt="Update" /></a></li>
+							<li><a class="btn_actions btn_details _client_delete" data-id="<?=$val->id?>"><img src="<?php echo APP_URL; ?>/assets/img/picto-action-supprimer.png" title="Supprimer" alt="Sup" /></a></li>
+							<!--li><a class="btn_actions btn_mdp _client_password" data-id="<?=$val->id?>">Renvoyer mot de passe</a></li-->
+						</ul>
+					</td>
+				</tr>
+				<?php $i++; } ?>
+			</tbody>
+		</table>
+		<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<?php echo $pagination;  ?>
+		</div>
+			<div class="col-md-2 mt16">
+				<label>Résultats par page
+					<select class="_pag_setup" name="" id="">
+						<option value="10" <?=($pag == 10)?'selected="selected"':'' ?>>10</option>
+						<option value="50" <?=($pag == 50)?'selected="selected"':'' ?>>50</option>
+						<option value="100" <?=($pag == 100)?'selected="selected"':'' ?>>100</option>
+					</select>
+				</label>
+			</div>
+		</div>
+	</div>

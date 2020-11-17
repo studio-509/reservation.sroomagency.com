@@ -1,0 +1,191 @@
+#calendar_table {
+	border-collapse:separate;
+	border-color: #fff;
+	width:100%;
+}
+.tableau { display:table;}
+#calendar_table .tr {
+	width:100%;
+	clear:both;
+	border-bottom:1px solid #ccc;
+	display:table-row;
+}
+#calendar_table .th,
+#calendar_table .td {
+	float:left;
+	width:100%;
+	padding:0px;
+	display:table-cell;
+	border:1px solid #fff;
+}
+#calendar_table .th {
+	background:#333;
+	color:#fff;
+	border:1px solid #FFF;
+	padding:10px;
+	height:70px;
+}
+#calendar_table .th .date {
+	font-weight:bold;
+	font-size:0.8em;}
+#calendar_table a { display:block; padding:8px; color:#fff;}
+#calendar_table a._admin_resa {color : #000;}
+#calendar_table .tr .td.horaires {
+	background:#eee;}
+#calendar_table .tr .td.reserve{
+	background-color: rgba(251, 0, 0, 0.66);
+}
+#calendar_table .tr .td.reserve a {
+	cursor:default;
+}
+#calendar_table .tr .td.libre,
+#reservation_table .tr.libre {
+	background-color:#336600;
+	color:#fff;
+	transition:all ease 0.6s;
+}
+#calendar_table .tr .td.libre:hover {
+	background-color:#669933;
+	transition:all ease 0.6s;
+}
+#calendar_table .tr .td.passe,
+#reservation_table .tr.passe{
+	
+	background-color:rgba(106, 100, 100, 0.66);
+	color:#333;
+}
+#calendar_table .tr .td.passe a,
+#reservation_table .tr.passe a{
+
+	cursor:default;
+}
+#calendar_table .tr .td.encours,
+#reservation_table .tr.encours{
+	background-color:rgba(235, 58, 2, 0.66);
+	color:#fff;
+}
+#calendar_table .tr .td.encours a,
+#reservation_table .tr.encours a{
+
+	cursor:default;
+}
+.resa_alerte, .bg_error{
+	background-color:rgba(255, 0, 0, 0.66)
+}
+@media all and (max-width: 767px) {
+	#calendar_table .th,
+	#calendar_table .tr .td { width:50%; display:block; float:left; overflow:hidden;}
+	#calendar_table .tr .td.col01 { width:100%;}
+	#calendar_table .tr { clear:both;}
+}
+@media all and (min-width: 768px) {
+	#calendar_table .th,
+	#calendar_table .td { width:14.28%;}
+}
+body#mobile .btnCalendar ul.listBtn {
+	padding:0;
+	margin:0 0 1em;}
+body#mobile .btnCalendar ul.listBtn >li {
+	display:block;
+	margin:0;
+	width:50%;
+	padding:1px;
+	box-sizing:border-box;
+	float:left;
+}
+body#mobile .btnCalendar ul.listBtn >li a {
+	width:100%;
+	color:#000;
+	text-decoration:none;}
+body#mobile .btnCalendar ul.listBtn >li a:hover {
+	background:#000;
+	color:#fff;}
+body#mobile .btnCalendar .btnPrev {}
+body#mobile .btnCalendar .btnNext {}
+body#mobile .btnValider {
+	background:#7FC704;
+	width:100%;
+	padding:10px;
+	color:#fff;
+	font-weight:bold;
+	display:block;
+	border-radius:10px;}
+body#mobile .btnValider:hover {
+	background:#000;}
+body#mobile .btnRadio {
+	margin:0;
+	padding-top:15px;}
+body#mobile .btnRadio {
+	/*display:block;
+	float:left;
+	content:"Libre";
+	color:#fff;
+	width:500px;
+	position:relative;
+	top:-4px;
+	margin:0 0 0 20px;
+	line-height:1em;*/
+	width:20px;
+	line-height:1em;
+	}
+.libre > label {
+	font-weight: normal;
+	cursor: default;
+}
+.blockMobile {
+	border:1px solid #ccc;
+	padding:10px;
+	clear:both;}
+.blockMobile > h2 {
+	text-align:center;
+	text-transform:uppercase;
+}
+body#mobile .list_form li > label,
+body#mobile .list_form .label {
+	width:100%;
+	color:#000;}
+body#mobile input[type=text],
+body#mobile input[type=password],
+body#mobile input[type=email],
+body#mobile input[type=time],
+body#mobile input[type=number],
+body#mobile input[type=date],
+body#mobile input[type=file],
+body#mobile textarea,
+body#mobile select {
+	width:100%;}
+.mobileCol01 {	background:#eee;}
+._bouton_cal_gauche {	float:left;	margin-bottom:10px;	margin-right:10px;}
+._bouton_cal_droite {	float:right;	margin-bottom:10px;	margin-left:10px;}
+h3.labelResa {	margin-top:0px;	margin-bottom:0px;}
+#selectionJoueurs {	margin-top:0.5em;	margin-bottom:0.5em;}
+h1.aheader-number {	margin-top:0px;	margin-bottom:0px;}
+#selectSalle p {
+	margin-top:0px;
+	margin-bottom:1.1em;
+	font-style:italic;
+	font-size:0.9em;
+}
+
+.legendeLeft {
+	float:left;
+	height:1.5em;
+	margin-right:0.2em;
+	margin-top:0.5em;
+	font-size:0.8em;
+}
+#carreLibre {
+	background-color:#669933;
+	width:1.5em;
+	margin-left:0.5em;
+}
+#carreIndispo {
+	background-color:rgba(106, 100, 100, 0.66);
+	width:1.5em;
+	margin-left:0.5em;
+}
+#carreEncours {	background-color:rgba(235, 58, 2, 0.66);
+	width:1.5em;
+	margin-left:0.5em;
+}.listBtn li a.month {	background: url("/assets/img/previous1.png") no-repeat left;	padding-left:40px;}
+

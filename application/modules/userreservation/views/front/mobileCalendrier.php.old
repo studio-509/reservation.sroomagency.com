@@ -1,0 +1,166 @@
+<div id="calendar" class="">
+	<div class="btnCalendar">
+        <ul class="listBtn mt16">
+            <li>
+                <?php if(date('Y-m-d', $prev) >= date('Y-m-d')): ?>
+                    <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$prev?>#calendar" class="btn btnPrev mb8">Jour précédent</a>
+                <?php endif; ?>
+            </li>
+            <li>
+                <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$next?>#calendar" class="btn btnNext mb8">Jour suivant</a>
+            </li>
+       </ul>
+       <ul class="listBtn">
+            <li>
+                <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$prev_week?>#calendar" class="btn btnPrev mb8">Semaine précédente</a>
+            </li>
+            <li>
+                <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$next_week?>#calendar" class="btn btnNext mb8">Semaine suivante</a>
+            </li>
+       </ul>
+       <ul class="listBtn">
+            <li>
+                <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$prev_mounth?>#calendar" class="btn btnPrev mb8">Mois précédent</a>
+            </li>
+            <li>
+                <a href="/reservation/mobile/<?=$current_salle->slug?>/<?=$next_mounth?>#calendar" class="btn btnNext mb8">Mois suivant</a>
+            </li>
+        </ul>
+    </div>
+<form name="form1" method="post" action="/reservation/mobileAdd">
+	<div class="blockMobile mb32">
+    	<?php
+			$start1 = $start;
+			$thisDay = date('Y-m-d', $start);
+		?>
+			<h3 class="th"><?=getFrDay(date('N', $start1))?><br /><?=date('d/m/Y', $start1)?></h3>
+			<?php
+				$start1 += 86400;
+			?>
+
+            <ul class="listHeureResa">
+
+				<?php
+                    $i = START_HOUR;
+                    while($i <= END_HOUR):
+                    $start2 = $start;
+
+                    $libre = 1;
+                        foreach($resas as $resa):
+                            if($resa->jour == date('Y-m-d', $start2) && $resa->horaire == $i):
+                                $libre = 0;
+                                break;
+                            endif;
+                        endforeach;
+
+                        if($libre == 0 && $resa->valide == 1 && (date('Y-m-d', $start2) > date('Y-m-d') || (date('Y-m-d', $start2) == date('Y-m-d') && $i > $current))):
+							echo '<li class="reserve">'.$i.'h00 : Réservé</li>';
+						elseif($libre == 0 && $resa->valide == 0):
+							echo '<li class=" encours">'.$i.'h00 : Résa en cours</li>';
+						elseif($libre == 1 && (date('Y-m-d', $start2) > date('Y-m-d') || ( date('Y-m-d', $start2) == date('Y-m-d') && $i > $current))):
+							echo '<li class="libre"><label for="horaire'.$i.'">'.$i.'h00 : Libre (sélectionner)</label> <input class="btnRadio" type="radio" name="horaire" id="horaire'.$i.'" value="'.$i.'" /></li>';
+						/*elseif($libre == 1 && (date('Y-m-d', $start2) == date('Y-m-d') && $i <= $current)):
+							echo '<li class="libre">h00 : Réservation sur place</li>';*/
+						else:
+							echo '<li class=" passe">'.$i.'h00 : Cloturé</li>';
+						endif;
+
+					$start2 += 86400;
+				?>
+			<?php
+                $i = $i + GAME_TIME;
+                endwhile;
+            ?>
+        </ul>
+    </div>
+
+
+    <div id="selectSalle" class="blockMobile mb32">
+        <h2>Votre aventure</h2>
+        <h3 class="labelResa">Aventure</h3>
+        <select name="salle" id="salle" data-orig="front" data-mobile="1">
+            <?php foreach($salles as $salle): ?>
+                <option value="<?=$salle->id?>" <?=($salle->id == $this->session->userdata('salle'))?'selected="selected"':''?>><?=$salle->nom?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <h3 class="labelResa">Nombre de joueurs</h3>
+        <select name="joueurs" id="joueurs">
+            <?php for($i = PLAYERS_MIN; $i <= PLAYERS_MAX; $i++): ?>
+                <option value="<?=$i?>" <?=($i == $this->session->userdata('joueurs'))?'selected="selected"':''?>><?=$i?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+
+
+
+	<div  class="blockMobile mb32">
+		<h2>Vos coordonnées</h2>
+		<ul class="list_form">
+			<li>
+				<label>Civilité :</label>
+				<select name="civil" id="civil">
+					<option value="M" <?=(isset($civil) && $civil == 'M')?'selectred="selected"':''?>>M</option>
+					<option value="Mme" <?=(isset($civil) && $civil == 'Mme')?'selectred="selected"':''?>>Mme</option>
+					<option value="Mlle" <?=(isset($civil) && $civil == 'Mlle')?'selectred="selected"':''?>>Mlle</option>
+				</select>
+			</li>
+			<li>
+				<label>Nom <span class="obligatoire">*</span> :</label>
+				<input class="_required" type="text" name="nom" id="nom" value="<?=($this->session->userdata('nom'))?$this->session->userdata('nom'):''?>" />
+			</li>
+			<li>
+				<label>Prénom <span class="obligatoire">*</span> :</label>
+				<input class="_required" type="text" name="prenom" id="prenom" value="<?=($this->session->userdata('prenom'))?$this->session->userdata('prenom'):''?>" />
+			</li>
+			<li>
+				<label>Email <span class="obligatoire">*</span> :</label>
+				<input class="_required _format_email" type="email" name="email" id="email" value="<?=($this->session->userdata('email'))?$this->session->userdata('email'):''?>" />
+			</li>
+			<li>
+				<label>Téléphone <span class="obligatoire">*</span> :</label>
+				<input class="_required" type="text" name="tel" id="tel" value="<?=($this->session->userdata('tel'))?$this->session->userdata('tel'):''?>" />
+			</li>
+			<li style="display:none">
+				<label>Login :</label>
+				<input type="text" name="login" id="login" value="<?=($this->session->userdata('login'))?$this->session->userdata('login'):''?>" />
+			</li>
+			<li style="display:none">
+				<label>Mot de passe :</label>
+				<input type="text" name="password" id="password" />
+				<input type="hidden" name="old_pass" id="old_pass" value="<?=(isset($pass))?$passm:''?>" />
+				<div class="txt_infos"> <a id="_form_client_pass" title="Générer">Générer</a></div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="blockMobile mb32">
+		<h2>Liste des joueurs</h2>
+		<p>Ce n’est pas obligatoire pour réserver mais, si vous le souhaitez, vous pouvez renseigner les adresses email des autres joueurs afin qu’ils soient prévenus de la date et de l’heure de l’aventure.</p>
+		<ul class="list_form">
+			<?php for($i = 1; $i <= 5; $i++): ?>
+				<li>
+					<label>Email Joueur <?=$i + 1?> :</label>
+					<input type="text" class="_format_email" name="joueur<?=$i?>" id="joueur<?=$i?>" value="<?=($this->session->userdata('joueur'.$i))?$this->session->userdata('joueur'.$i):''?>" />
+				</li>
+			<?php endfor; ?>
+		</ul>
+	</div>
+
+	<div class="blockMobile mb32">
+		<h2>Code de réduction</h2>
+		<label>Je bénéficie d'un code de réduction : </label>
+		<input type="text" name="voucher" id="voucher" value="<?=(isset($voucher))?$voucher:''?>" />
+		<input type="button" class="button btn_L btn_annul mt32" value="Tester le code" id="_test_voucher" /></p>
+		<div class="error masque2" id="error_voucher">Le code de réduction saisi n’est pas valide. Veuillez le vérifier </div>
+		<div class="error masque2" id="used_voucher">Le code de réduction que vous avez saisi a déjà été utilisé. Aucune réduction ne peut être appliquée</div>
+		<div class="error masque2" id="ok_voucher">Ce code est valide</div>
+	</div>
+
+    <div>
+		<input type="hidden" name="id_resa" id="id_resa" value="<?=(isset($id_resa))?$id_resa:''?>" />
+        <input type="hidden" name="origine" value="<?=current_url()?>">
+        <input type="hidden" name="client_id" value="<?=($this->session->userdata('client_id'))?$this->session->userdata('client_id'):''?>">
+        <input type="hidden" name="jour" value="<?=$thisDay?>">
+        <input type="button" class=" btn btnValider" onClick="valideForm1(this.form)" value="Valider">
+    </div>

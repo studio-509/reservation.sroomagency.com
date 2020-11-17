@@ -1,0 +1,28 @@
+.button_active{	background-color: #b40000;}
+
+.alert-warning {position: relative;color: #666;border-color: rgba(255,255,255,0);}
+
+.alert-warning div  {display: inline-block;font-size: 14px;
+
+vertical-align: middle;
+
+color: #000;}
+
+.alert-warning div.warning-sign {width: 30px;
+
+height: 30px;
+
+background: url(../../../img/warning.png);
+
+background-size: cover;
+
+background-position: center center;
+
+line-height: 40px;
+
+margin: 0 15px 0 0;}
+
+
+
+/*.alert-warning p { margin: auto auto; line-height: 20px;}*/
+

@@ -1,0 +1,22 @@
+/* --------------------------------------------------------------------------------------- */
+/* Structure Page */
+/* Structure Header */#header-wrapper { box-shadow:0 2px 5px #000;}#menu-wrapper { background:#333; border-top:1px solid #fff;}
+/* Stucture Main content */
+#main-wrapper {background:#fff;}#content { background:#fff; min-height:300px}#left_sidebar {}#right_sidebar {}#header_content {}
+/* Structure footer */
+#footer  { position:relative}#footer .section { padding:0.5em;}
+/* --------------------------------------------------------------------------------------- */
+/* Structure page accueil */
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+/* Responsive */
+@media all and (max-width: 560px) {	#header .f_left,	#header .f_right { width:100%; float:none; clear:both;}	#infos_sites,	#rapid_access,	#left_sidebar,	#footer .f_left,	#breadcrumb { display:none;}	.btn_gotop { clear:both; width:50%; float:none; margin:1em auto;}}
+
+@media all and (min-width: 561px) and (max-width: 990px) {}
+@media all and (max-width: 990px) {	#header .f_right { width:100%}	#content {}}
+@media all and (min-width: 991px) {	#header-wrapper,	#footer-wrapper { position:fixed; left:0; z-index:500; width:100%}	#header-wrapper { top:0;}	#footer-wrapper { bottom:0;}	#main-wrapper { margin-top:90px; padding:60px 0;}.no-front #main-wrapper {margin-top:100px!important; padding:0 0!important;}}
+@media all and (min-width: 1200px) {
+}
+.top15{  margin-top:15px;}
+.button_active{	background-color: #b40000;}
+/* --------------------------------------------------------------------------------------- */

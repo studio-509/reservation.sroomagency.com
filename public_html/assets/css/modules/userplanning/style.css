@@ -1,0 +1,67 @@
+.button_active{	background-color: #b40000;}
+
+.alert-warning {position: relative;color: #666;border-color: rgba(255,255,255,0);}
+
+.alert-warning div  {display: inline-block;font-size: 14px;
+
+vertical-align: middle;
+
+color: #000;}
+
+.alert-warning div.warning-sign {width: 30px;
+
+height: 30px;
+
+background: url(../../../img/warning.png);
+
+background-size: cover;
+
+background-position: center center;
+
+line-height: 40px;
+
+margin: 0 15px 0 0;}
+
+.hour_button {
+	width:100px;
+	font-size:10px;
+	text-align:center;
+}
+.hour_button_active {
+	background-color:#009922;
+	border:solid #BBBBBB 1px;
+}
+.hour_button_active:hover {
+	cursor:pointer;
+	border:solid #FF2222 2px;
+}
+.hour_button_select {
+	border:solid #FF2222 2px;
+}
+.hour_button_select:hover {
+	cursor:pointer;
+	background-color:#FFDDDD;
+}
+.hour_button_none {
+	border:solid #BBBBBB 1px;	
+}
+.hour_button_none:hover {
+	cursor:pointer;
+	background-color:#FFDDDD;
+}
+._titre_col_plan {
+	width:100px;
+	font-size:12px;
+	text-align:center;
+	border:solid #BBBBBB 1px;
+}
+._reset_planning_day {
+	cursor:pointer;
+	background-color:#000000;
+	color:#FFFFFF;
+}
+
+
+
+/*.alert-warning p { margin: auto auto; line-height: 20px;}*/
+

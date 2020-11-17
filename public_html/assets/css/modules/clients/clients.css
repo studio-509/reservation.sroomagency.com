@@ -1,0 +1,18 @@
+.pag_button {
+	width:15px;
+	display:inline;
+}
+._pag_current {
+	background:#b40000;
+}
+
+.pag_container {
+	display:block;
+	margin-left:25px;
+	height:40px;
+	clear:both;
+	text-align:center;
+}
+.label_results_page {
+	margin-left:25px;
+}

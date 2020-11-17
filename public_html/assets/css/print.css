@@ -1,0 +1,30 @@
+
+.mb0 { margin-bottom: 0!important}
+.mt0 { margin-top: 0!important;}
+
+.text-center { text-align: center;}
+
+/* -------------------------------------------------- */
+/* Carte cadeau */
+/* -------------------------------------------------- */
+
+#carteCadeau {}
+
+#ccCoordonnes {
+	color: #fff;
+	background: #000;
+	width: 6.6cm;
+}
+
+.tel {
+	color: #ED1C24;
+	font-size: 14pt;
+}
+
+#ccInfos {}
+#ccInfos h1 {
+	font-size: 20pt;
+	color: #ED1C24;
+	font-weight: bold;
+	text-transform: uppercase;
+}

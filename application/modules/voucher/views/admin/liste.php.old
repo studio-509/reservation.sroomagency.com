@@ -1,0 +1,148 @@
+<div class="row">
+
+  <div class="col-md-8 col-md-offset-2">
+
+    <?php echo $pagination;  ?>
+
+  </div>
+
+  <div class="col-md-2 pull-right">
+
+    <label>Résultats par page</label>
+
+    <select class="_pag_setup" name="">
+
+      <option value="10" <?=($pag == 10)?'selected="selected"':'' ?>>10</option>
+
+      <option value="50" <?=($pag == 50)?'selected="selected"':'' ?>>50</option>
+
+      <option value="100" <?=($pag == 100)?'selected="selected"':'' ?>>100</option>
+
+    </select>
+
+  </label>
+
+  <a id="voucher_add" class="button _voucher_item_add">Créer Carte Cadeau</a>
+
+</div>
+
+</div>
+
+<table id="table_voucher" class="table table-striped table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  <thead>
+
+    <tr>
+
+      <th class="col01 first">ID</th>
+
+      <th class="col01">Montant</th>
+
+      <th class="col01">Code</th>
+
+      <th class="col01">Client</th>
+
+      <th class="col01">Active</th>
+
+      <th class="col07 last">Actions</th>
+
+    </tr>
+
+  </thead>
+
+  <tbody>
+
+    <?php foreach ($voucher_list as $val): ?>
+
+      <tr id="_tr<?=$val->voucher_id?>">
+
+        <td class='col01 first'><?=$val->voucher_id?></td>
+
+        <td class='col01'><?=$val->voucher_montant?></td>
+
+        <td class='col01'><?=$val->voucher_code?></td>
+
+        <td class='col01'><?=$val->cl_prenom?> <?=$val->cl_nom?></td>
+
+        <td class='col01'>
+
+          <?php
+
+          if($val->voucher_val == 1)
+
+          {
+
+            echo '<span class=text-success><strong>OUI</strong></span>/';
+
+            ?>
+
+            <a class='btn_actions _voucher_set_inactive' data-id='<?=$val->voucher_id?>'>NON</a>
+
+            <?php
+
+          } else
+
+          { ?>
+
+            <a class='btn_actions _voucher_set_active' data-id='<?=$val->voucher_id?>'>OUI</a>
+
+            <?php echo '<span class=text-danger><strong>NON</strong></span>';
+
+          }
+
+          ?>
+
+        </td>
+
+        <td class='col07 last'>
+
+          <ul class="list-action">
+
+            <li><a class="btn_actions btn_details _voucher_item_update" data-id="<?=$val->voucher_id?>"><img src="<?php echo APP_URL; ?>/assets/img/picto-action-modifier.png" title="Modifier" alt="Update" /></a></li>
+
+            <li><a class="btn_actions btn_supp _voucher_item_delete" data-id="<?=$val->voucher_id?>"><img src="<?php echo APP_URL; ?>/assets/img/picto-action-supprimer.png" title="Supprimer" alt="Sup" /></a></li>
+
+			<li><a ><img id="createpdf" data-id="<?=$val->voucher_code?>" src="<?php echo APP_URL; ?>/assets/img/picto-action-pdf.png" title="Créer le PDF" alt="PDF" /></a></li>
+
+           <!-- <li><a href="<?//='/voucher/pdf/'.$val->voucher_code?>" target="_blank"><img src="<?php// echo APP_URL; ?>/assets/img/picto-action-pdf.png" /></a></li> -->
+
+          </ul>
+
+        </td>
+
+      </tr>
+
+    <?php endforeach; ?>
+
+  </tbody>
+
+</table>
+
+<div class="row">
+
+  <div class="col-md-8 col-md-offset-2">
+
+    <?php echo $pagination;  ?>
+
+  </div>
+
+  <div class="col-md-2 pull-right">
+
+    <label>Résultats par page</label>
+
+      <select class="_pag_setup" name="">
+
+        <option value="10" <?=($pag == 10)?'selected="selected"':'' ?>>10</option>
+
+        <option value="50" <?=($pag == 50)?'selected="selected"':'' ?>>50</option>
+
+        <option value="100" <?=($pag == 100)?'selected="selected"':'' ?>>100</option>
+
+      </select>
+
+    </label>
+
+  </div>
+
+</div>
+
