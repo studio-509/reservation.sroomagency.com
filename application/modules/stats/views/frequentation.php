@@ -1,5 +1,5 @@
 <div style="width:1400px;height:600px;">
-	modif test
+	<p>modif test</p>
 	<canvas id="chart_resas_mois" width="100" height="40"></canvas>
 	<script type="text/javascript">
 		<?php
