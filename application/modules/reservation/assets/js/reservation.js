@@ -572,7 +572,8 @@ $(document).ready(function() {
 				type: 'POST',
 				url: '/voucher/test',
 				data: {
-					'voucher': voucher
+					'voucher': voucher,
+					'jour' : $('#jour_resa').val()
 				},
 				success: function(data, textStatus, jqXHR) {
 					if(data == 0){
@@ -777,7 +778,8 @@ $(document).ready(function() {
 				url: '/voucher/test',
 				data: {
 					'voucher': $('#voucher').val(),
-					'salle': salle
+					'salle': salle,
+					'jour' : jour
 				},
 				success: function(data, textStatus, jqXHR) {
 					switch (data) {

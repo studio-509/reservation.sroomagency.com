@@ -465,6 +465,7 @@ class Voucher extends MY_Controller {
 		
 		$code = $this->input->post('voucher');
 		$salle = $this->input->post('salle');
+		$datelimite = substr($this->input->post('jour'),0,4).substr($this->input->post('jour'),5,2);
 		$test = $this->VoucherModel->getData('voucher', ['code' => $code] );
 		$voucherduree = $this->VoucherModel->getData('voucher_duree',['id' => 2]);
 		if (!$test) {
@@ -491,7 +492,7 @@ class Voucher extends MY_Controller {
 				}
 				if ($moisvalid <10) $moisvalid = "0".$moisvalid;
 				$datevalid = $anneevalid.$moisvalid;
-				if (date(Ym)>$datevalid) echo 2;
+				if ($datelimite>$datevalid) echo 2;
 				else echo 4;
 			}		
 			else echo 1;
