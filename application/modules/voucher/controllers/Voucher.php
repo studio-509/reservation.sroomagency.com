@@ -482,7 +482,7 @@ class Voucher extends MY_Controller {
 		else {
 			if ($test->valide == 1 && $test->montant > 0) {
 				$anneevalid = intval(substr($test->date_achat,0,4));
-				$moisvalid = intval(substr($test->date_achat,5,2))+6;
+				$moisvalid = intval(substr($test->date_achat,5,2))+ VOUCHER_DURATION;
 				if ($moisvalid > 12) {
 					$moisvalid -= 12;
 					$anneevalid += 1;
