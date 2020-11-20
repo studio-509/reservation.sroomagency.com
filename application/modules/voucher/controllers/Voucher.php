@@ -404,6 +404,7 @@ class Voucher extends MY_Controller {
 		} */
 		$code = $this->input->post('voucher');
 		$infos = $this->VoucherModel->getData('voucher', array('code' => $this->uri->segment(3)));
+		$voucherduree = $this->VoucherModel->getData('voucher_duree',['id' => 2]);
 		//$infos = $this->VoucherModel->getData('voucher', array('code' => $code));
 		$cgv = $this->VoucherModel->getData('voucher_cgv', ['id' => 1]);
 		if($infos === FALSE)
@@ -412,7 +413,7 @@ class Voucher extends MY_Controller {
 		}
 		$this->data['date_achat'] = $infos->date_achat;
 		$anneevalid = intval(substr($infos->date_achat,0,4));
-		$moisvalid = intval(substr($infos->date_achat,5,2))+6;
+		$moisvalid = intval(substr($infos->date_achat,5,2))+$voucherduree->duree;
 		if ($moisvalid > 12) {
 			$moisvalid -= 12;
 			$anneevalid += 1;
@@ -465,6 +466,7 @@ class Voucher extends MY_Controller {
 		$code = $this->input->post('voucher');
 		$salle = $this->input->post('salle');
 		$test = $this->VoucherModel->getData('voucher', ['code' => $code] );
+		$voucherduree = $this->VoucherModel->getData('voucher_duree',['id' => 2]);
 		if (!$test) {
 			$test = $this->VoucherModel->getData('promo', ['code' => $code] );
 			if (!$test) {
@@ -482,7 +484,7 @@ class Voucher extends MY_Controller {
 		else {
 			if ($test->valide == 1 && $test->montant > 0) {
 				$anneevalid = intval(substr($test->date_achat,0,4));
-				$moisvalid = intval(substr($test->date_achat,5,2))+ VOUCHER_DURATION;
+				$moisvalid = intval(substr($test->date_achat,5,2))+$voucherduree->duree;
 				if ($moisvalid > 12) {
 					$moisvalid -= 12;
 					$anneevalid += 1;
