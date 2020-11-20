@@ -44,6 +44,10 @@ class Voucheradmin extends MY_Controller
     $this->data['voucher_list'] = $this->VoucherModel->get_list_voucher($limit);
 	$this->data['voucher_list_dest'] = $this->VoucherModel->getList('client');
 	$this->data['voucher_duree'] = $this->VoucherModel->getData('voucher_duree',['id' => 2]);
+	
+	//A supprimer pour repasser la durée de validité de base des voucher en mode bdd
+	$this->data['voucher_duree']->duree = VOUCHER_DURATION;
+	
 	$this->data['voucher_type'] = $this->VoucherModel->getList('voucher_type');
     // configuration pagination
     $config['base_url'] = APP_URL.'/admin/vouchers';
