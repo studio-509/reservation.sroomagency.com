@@ -23,6 +23,7 @@ define('START_HOUR', 10);
 define('END_HOUR', 22);
 define('GAME_TIME', 2);
 define('DELTA', 4);
+define('VOUCHER_DURATION',12);
 define('DROP_WE', '18h00');
 define('SRA_ADRESS', '40 BIS RUE VOLTAIRE 82000 MONTAUBAN');
 define('SRA_TEL', '07 84 96 43 48');
